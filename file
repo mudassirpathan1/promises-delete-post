@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Async JS</title>
+
+</head>
+
+<body>
+
+    
+
+    <script>
+
+const post = [
+
+{
+
+  title: "Post one",
+
+  body: "this is first post",
+
+  createAt: new Date().getTime(),
+
+},
+
+{
+
+  title: "Post two",
+
+  body: "this is second post",
+
+  createAt: new Date().getTime(),
+
+},
+
+];
+
+
+
+// get post
+
+function getpost() {
+
+//   take storage here string form
+
+
+
+setInterval(() => {
+
+  let output = "";
+
+  for (var a = 0; a < post.length; a++) {
+
+    output += `<li>${post[a].title} : => last updated time ${
+
+      (new Date().getTime() - post[a].createAt) / 1000
+
+    }  seconds ago</li>`;
+
+  }
+
+
+
+  document.body.innerHTML = output;
+
+}, 1000);
+
+}
+
+
+
+getpost();
+
+
+
+//   create post here
+
+
+
+function createPost(store, callback) {
+
+setTimeout(() => {
+
+  post.push({ ...store, createAt: new Date().getTime() });
+
+  callback();
+
+}, 1000);
+
+}
+
+createPost({ title: "post third post", body: "this is third post" }, getpost);
+
+
+
+function create4Post(store, callback) {
+
+setTimeout(() => {
+
+  post.push({ ...store, createAt: new Date().getTime() });
+
+  callback();
+
+}, 1000);
+
+}
+
+create4Post(
+
+{ title: "post fourth post", body: "this is fourth post" },
+
+getpost
+
+);
+
+
+
+//   delete el in array
+
+
+
+function deleteEL() {
+
+return new Promise((resolve, reject) => {
+
+  setTimeout(() => {
+
+    if (post.length > 0) {
+
+      let del = post.pop();
+
+      resolve(del);
+
+    } else {
+
+      reject("Array is empty");
+
+    }
+
+  }, 1000);
+
+});
+
+}
+
+
+
+deleteEL({ title: "next value", body: "show" })
+
+.then(() => {
+
+  getpost();
+
+
+
+  deleteEL().then(() => {
+
+    getpost();
+
+
+
+    deleteEL().then(() => {
+
+      getpost();
+
+
+
+      deleteEL().then(() => {
+
+        getpost();
+
+        deleteEL().then(() => {
+
+          getpost();
+
+          deleteEL()
+
+            .then(() => {})
+
+            .catch(() => {
+
+              console.log("something wrong");
+
+            });
+
+        });
+
+      });
+
+    });
+
+  });
+
+})
+
+.catch((err)=>{
+
+  console.log("something gonna wrong", err)
+
+})
+
+    </script>
+
+</body>
+
+</html>
